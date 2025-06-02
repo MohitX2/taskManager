@@ -64,7 +64,6 @@ function Modal({
                   ? "bg-[#F79B72]/50 "
                   : "bg-[#F79B72] hover:bg-[#e28461]"
               } text-white font-bold py-2 px-4 rounded`}
-              disabled={title.trim().length === 0}
             >
               Add Task
             </button>

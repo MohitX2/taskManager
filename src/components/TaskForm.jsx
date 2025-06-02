@@ -1,11 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { TaskContext } from "../contexts/TaskContext";
 import Modal from "./Modal";
 import Task from "./Task";
 import { Outlet } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 const TaskForm = () => {
-  const { addTask, addNewType, taskList, typeList } = useContext(TaskContext);
+  const { addTask, addNewType, typeList } = useContext(TaskContext);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -15,29 +16,52 @@ const TaskForm = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [buttonType, setButtonType] = useState("");
 
+  useEffect(() => {
+    toast("Welcome !", {
+      icon: "👋",
+    });
+  }, []);
+
   const handleCat = () => {
     const trimmed = customCat.trim();
-    if (trimmed.length === 0) return;
-    addNewType(customCat);
-    setCustomCat("");
+    if (trimmed.length === 0) toast.error("Category Not Added !");
+    else {
+      toast.success(`${customCat} category added !`);
+      addNewType(customCat);
+      setCustomCat("");
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    addTask(title, type, description);
-    setTitle("");
-    setType("todo");
-    setDescription("");
-    setIsOpenModal(false);
+    const trimmedTitle = title.trim();
+
+    if (trimmedTitle.length === 0) {
+      toast.error("Task Not Added !");
+      setIsOpenModal(false);
+      return;
+    } else {
+      addTask(title, type, description);
+      setTitle("");
+      setType("todo");
+      setDescription("");
+      setIsOpenModal(false);
+      toast.success(`Task added in ${type}!`);
+    }
   };
 
-  console.log(taskList, "from TaskForm");
+  console.log(customCat, "from TaskForm");
 
   const renderForm = () => {
     return (
       <>
         <form
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+            }
+          }}
           onSubmit={handleSubmit}
           className="flex gap-2 my-2 items-start w-full bg-blue-50 p-3 rounded-md justify-around  md:flex-row md:items-center"
         >
@@ -65,7 +89,6 @@ const TaskForm = () => {
                   ? "bg-gray-400"
                   : "bg-green-300 hover:bg-green-400"
               } text-white transition mt-2 font-semibold py-2 px-4 rounded`}
-              disabled={customCat.trim().length === 0}
               onClick={handleCat}
             >
               Add Category
@@ -116,7 +139,7 @@ const TaskForm = () => {
       </>
     );
   };
-  
+
   return (
     <div className="">
       <div className="mx-5">
@@ -131,8 +154,14 @@ const TaskForm = () => {
 
       <Modal
         open={isOpenModal}
-        onClose={() => setIsOpenModal(false)}
-        onBackdivClick={() => setIsOpenModal(false)}
+        onClose={() => {
+          setIsOpenModal(false);
+          toast.error("task not added!");
+        }}
+        onBackdivClick={() => {
+          setIsOpenModal(false);
+          toast.error("task not added!");
+        }}
         title={title}
         setTitle={setTitle}
         description={description}
