@@ -3,7 +3,8 @@ import { TaskContext } from "../contexts/TaskContext";
 import Modal from "./Modal";
 import Task from "./Task";
 import { Outlet } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { Grid } from "react-virtualized";
 
 const TaskForm = () => {
   const { addTask, addNewType, typeList } = useContext(TaskContext);
@@ -15,12 +16,6 @@ const TaskForm = () => {
   const [customCat, setCustomCat] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [buttonType, setButtonType] = useState("");
-
-  useEffect(() => {
-    toast("Welcome !", {
-      icon: "👋",
-    });
-  }, []);
 
   const handleCat = () => {
     const trimmed = customCat.trim();
@@ -51,7 +46,36 @@ const TaskForm = () => {
     }
   };
 
-  console.log(customCat, "from TaskForm");
+  const catRender = ({ key, style, columnIndex }) => {
+    console.log("reached")
+    const category = typeList[columnIndex];
+    return (
+      <div
+        key={key}
+        className="min-w-[00px] max-w-[450px] min-h-[400px] bg-opacity-90 p-5 rounded-lg shadow-md"
+        style={{ ...style, backgroundColor: category.color }}
+      >
+        <div className="flex justify-between items-center mb-2">
+          <p className="font-bold uppercase text-lg">{category.title}</p>
+
+          <button
+            value={buttonType}
+            onClick={() => {
+              setIsOpenModal(true);
+              setButtonType(category.title);
+              setType(category.title);
+            }}
+            className="h-8 w-8 bg-red-300 rounded-lg font-bold text-white flex items-center justify-center"
+          >
+            +
+          </button>
+        </div>
+        <Task type={category} />
+      </div>
+    );
+  };
+
+  console.log("from TaskForm");
 
   const renderForm = () => {
     return (
@@ -99,47 +123,6 @@ const TaskForm = () => {
     );
   };
 
-  const renderCatogeries = () => {
-    return (
-      <>
-        <div className="taskShow">
-          <div className="p-4 m-4 bg-white rounded-lg h-screen ">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              Your Tasks:
-            </h2>
-
-            <div className="flex overflow-auto gap-4 pb-4">
-              {typeList.map((type) => (
-                <div
-                  key={type.color}
-                  className="min-w-[300px] max-w-[450px] min-h-[400px] bg-opacity-90 p-5 rounded-lg shadow-md"
-                  style={{ backgroundColor: type.color }}
-                >
-                  <div className="flex justify-between items-center mb-2">
-                    <p className="font-bold uppercase text-lg">{type.title}</p>
-
-                    <button
-                      value={buttonType}
-                      onClick={() => {
-                        setIsOpenModal(true);
-                        setButtonType(type.title);
-                        setType(type.title);
-                      }}
-                      className="h-8 w-8 bg-red-300 rounded-lg font-bold text-white flex items-center justify-center"
-                    >
-                      +
-                    </button>
-                  </div>
-                  <Task type={type} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  };
-
   return (
     <div className="">
       <div className="mx-5">
@@ -149,7 +132,23 @@ const TaskForm = () => {
 
         {renderForm()}
       </div>
-      {renderCatogeries()}
+      <div className="taskShow">
+        <div className="p-4 m-4 bg-white rounded-lg h-screen ">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Tasks:</h2>
+
+          
+            <Grid
+              cellRenderer={catRender}
+              columnCount={typeList.length}
+              columnWidth={300}
+              rowCount={1}
+              rowHeight={1000}
+              width={800}
+              height={300}
+              overscanColumnCount={2}
+            />
+        </div>
+      </div>
       <Outlet />
 
       <Modal
