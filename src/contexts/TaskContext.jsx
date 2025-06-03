@@ -1,4 +1,6 @@
 import { createContext, useState } from "react";
+import toast from "react-hot-toast";
+
 
 function generateRandomPastelColor() {
   const randomChannel = () => Math.floor(Math.random() * 128 + 127);
@@ -32,10 +34,12 @@ export const TaskContextProvider = ({ children }) => {
 
   const delTask = (id) => {
     setTaskList((prev) => prev.filter((cur) => cur.id != id));
+    toast.error("Deleted !");
   };
 
   const updateTask = (id, newDesc) => {
-    console.log("update is here",id,newDesc)
+    
+    toast.success("Updated!");
   setTaskList(prev =>
     prev.map(task =>
       task.id === id ? { ...task, desc: newDesc } : task
