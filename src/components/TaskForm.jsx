@@ -4,7 +4,6 @@ import Modal from "./Modal";
 import Task from "./Task";
 import { Outlet } from "react-router-dom";
 import toast from "react-hot-toast";
-import { DiDreamweaver } from "react-icons/di";
 
 const TaskForm = () => {
   const { addTask, addNewType, typeList } = useContext(TaskContext);
@@ -17,23 +16,26 @@ const TaskForm = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [buttonType, setButtonType] = useState("");
 
-  const [divWidth, setdivWidth] = useState();
+  const [containerWidth, setContainerWidth] = useState();
+  const [percentage, setPercentage] = useState(0);
+  const [scrollableWidth, setScrollableWidth] = useState(0);
   const itemWidth = 200;
   const divRef = useRef(null);
 
   useEffect(() => {
-    const updateWidth = () => {
-      if (divRef.current) {
-        const offWidth = divRef.current.offsetWidth;
-        setdivWidth(offWidth);
-        setIndice([0, Math.floor(offWidth / itemWidth)]);
-      }
+    const updateWindowWidth = () => {
+      setContainerWidth(divRef.current.clientWidth);
+      setScrollableWidth(divRef.current.scrollWidth);
     };
 
-    updateWidth();
-    window.addEventListener("resize",updateWidth);
-return () => window.removeEventListener("resize", updateWidth);
+    window.addEventListener("resize", updateWindowWidth);
+  }, []);
 
+  useEffect(() => {
+    if (divRef.current) {
+      setContainerWidth(divRef.current.clientWidth);
+      setScrollableWidth(divRef.current.scrollWidth);
+    }
   }, [typeList]);
 
   const handleCat = () => {
@@ -65,17 +67,19 @@ return () => window.removeEventListener("resize", updateWidth);
       toast.success(`Task added in ${type}!`);
     }
   };
-console.log()
-  const [indice, setIndice] = useState([0, 2]);
-  const visibleCat = typeList.slice(indice[0], indice[1] + 1);
+
+  const visibleCat = typeList.slice();
 
   const handleScroll = (e) => {
-    const { scrollLeft } = e.target;
-    const newStart = Math.floor(scrollLeft / itemWidth);
-    const newEnd = newStart + Math.floor(divWidth / itemWidth);
-    setIndice([newStart, newEnd]);
+    const scrollLeft = e.target.scrollLeft;
+    const visiblePart = scrollableWidth - containerWidth;
+    const perc = (scrollLeft / visiblePart) * 100;
+    setPercentage(perc);
 
-    console.log(indice, ":        :", visibleCat);
+    if(perc>90){
+      visibleCat=typeList.slice()
+    }
+
   };
 
   const renderForm = () => (
@@ -133,7 +137,7 @@ console.log()
           {visibleCat.map((type) => (
             <div
               key={type.color}
-              className="min-w-[300px] max-w-[300px] min-h-[400px] bg-opacity-90 p-5 rounded-lg shadow-md"
+              className={`${type.title} min-w-[300px] max-w-[300px] min-h-[400px] bg-opacity-90 p-5 rounded-lg shadow-md`}
               style={{ backgroundColor: type.color }}
             >
               <div className="flex justify-between items-center mb-2">
@@ -156,7 +160,9 @@ console.log()
       </div>
     </div>
   );
-  console.log(divWidth);
+
+  console.log("scrollWidth:", scrollableWidth);
+  console.log("Scroll %:", percentage);
 
   return (
     <div>
