@@ -16,13 +16,16 @@ const TaskForm = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [buttonType, setButtonType] = useState("");
 
+
   const [containerWidth, setContainerWidth] = useState();
-  const [percentage, setPercentage] = useState(0);
+
   const [scrollableWidth, setScrollableWidth] = useState(0);
-  const itemWidth = 200;
-  const [indices, setIndices] = useState([0,10])
-   const visibleList=typeList.slice()
+  const items = 5;
+  const itemswidth=300
+  const [indices, setIndices] = useState([0,items])
+  const visibleList=typeList.slice(indices[0],indices[1])
   const divRef = useRef(null);
+
 
   useEffect(() => {
     const updateWindowWidth = () => {
@@ -71,15 +74,15 @@ const TaskForm = () => {
   };
   
   const handleScroll = (e) => {
-    const scrollLeft = e.target.scrollLeft;
-    const visiblePart = scrollableWidth - containerWidth;
-    const perc = (scrollLeft / visiblePart) * 100;
-    setPercentage(perc);
-
-  
-    if (perc > 90) {
-      setIndices([10,visibleList.length]);
-    }
+    const {scrollLeft} = e.target;
+    console.log(scrollLeft)
+     const newStartIndex = Math.floor(scrollLeft / itemswidth);
+     const newEndIndex = newStartIndex + Math.floor(containerWidth/itemswidth)
+    // const visiblePart = scrollableWidth - containerWidth;
+    // const perc = (scrollLeft / visiblePart) * 100;
+    // setPercentage(perc);
+    setIndices([newStartIndex,newEndIndex])
+    
   };
   const renderForm = () => (
     <form
@@ -132,14 +135,20 @@ const TaskForm = () => {
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Tasks:</h2>
         <div
           ref={divRef}
-          className="overflow-x-auto bg-red-300 flex gap-4 pb-4 px-2"
+          className="Container overflow-x-auto bg-red-300  pb-4 px-2"
+
           onScroll={handleScroll}
-        >
-          {visibleList.map((type) => (
-            <div
+
+        ><div className=" bigWindow relative "
+        style={{ width:itemswidth*typeList.length,
+        height: "400px"}}>
+          {visibleList.map((type,index) => {
+            return <div
               key={type.color}
-              className={`${type.title} min-w-[300px] max-w-[300px] min-h-[400px] bg-opacity-90 p-5 rounded-lg shadow-md`}
-              style={{ backgroundColor: type.color }}
+              className={`${type.title+" child"} h-[400px] absolute min-w-[300px] max-w-[300px] bg-opacity-90 p-5 rounded-lg shadow-md`}
+              style={{ backgroundColor: type.color ,
+                        left: `${(indices[0] + index) * itemswidth}px`,}
+                        }
             >
               <div className="flex justify-between items-center mb-2">
                 <p className="font-bold uppercase text-lg">{type.title}</p>
@@ -156,14 +165,16 @@ const TaskForm = () => {
               </div>
               <Task type={type} />
             </div>
-          ))}
+          })}
+          </div>
         </div>
       </div>
     </div>
   );
 
-  console.log("scrollWidth:", scrollableWidth);
-  console.log("Scroll %:", percentage);
+  console.log(visibleList,"scrollWidth:", scrollableWidth);
+ 
+  
 
   return (
     <div>
