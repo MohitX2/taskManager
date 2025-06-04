@@ -20,6 +20,7 @@ const TaskForm = () => {
   const [percentage, setPercentage] = useState(0);
   const [scrollableWidth, setScrollableWidth] = useState(0);
   const itemWidth = 200;
+  const [visibleList, setVisibleList] = useState(typeList);
   const divRef = useRef(null);
 
   useEffect(() => {
@@ -68,18 +69,17 @@ const TaskForm = () => {
     }
   };
 
-  const visibleCat = typeList.slice();
-
   const handleScroll = (e) => {
     const scrollLeft = e.target.scrollLeft;
     const visiblePart = scrollableWidth - containerWidth;
     const perc = (scrollLeft / visiblePart) * 100;
     setPercentage(perc);
 
-    if(perc>90){
-      visibleCat=typeList.slice()
+    if (perc > 90) {
+      setVisibleList(() => {
+        typeList.slice();
+      });
     }
-
   };
 
   const renderForm = () => (
@@ -134,7 +134,7 @@ const TaskForm = () => {
           className="overflow-x-auto bg-red-300 flex gap-4 pb-4 px-2"
           onScroll={handleScroll}
         >
-          {visibleCat.map((type) => (
+          {visibleList.map((type) => (
             <div
               key={type.color}
               className={`${type.title} min-w-[300px] max-w-[300px] min-h-[400px] bg-opacity-90 p-5 rounded-lg shadow-md`}
