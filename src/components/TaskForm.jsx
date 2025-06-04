@@ -42,6 +42,7 @@ const TaskForm = () => {
       setScrollableWidth(divRef.current.scrollWidth);
     }
   }, [typeList]);
+  
 
   const handleCat = () => {
     const trimmed = customCat.trim();
@@ -78,9 +79,11 @@ const TaskForm = () => {
     console.log(scrollLeft)
      const newStartIndex = Math.floor(scrollLeft / itemswidth);
      const newEndIndex = newStartIndex + Math.floor(containerWidth/itemswidth)
+
     // const visiblePart = scrollableWidth - containerWidth;
     // const perc = (scrollLeft / visiblePart) * 100;
     // setPercentage(perc);
+
     setIndices([newStartIndex,newEndIndex])
     
   };
@@ -145,7 +148,7 @@ const TaskForm = () => {
           {visibleList.map((type,index) => {
             return <div
               key={type.color}
-              className={`${type.title+" child"} h-[400px] absolute min-w-[300px] max-w-[300px] bg-opacity-90 p-5 rounded-lg shadow-md`}
+              className={`${type.title+"child"} h-[400px] absolute min-w-[300px] max-w-[300px] bg-opacity-90 p-5 rounded-lg shadow-md mx-9`}
               style={{ backgroundColor: type.color ,
                         left: `${(indices[0] + index) * itemswidth}px`,}
                         }
@@ -172,7 +175,8 @@ const TaskForm = () => {
     </div>
   );
 
-  console.log(visibleList,"scrollWidth:", scrollableWidth);
+  console.log(visibleList,"scrollWidth:", scrollableWidth)
+
  
   
 
