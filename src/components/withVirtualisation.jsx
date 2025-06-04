@@ -1,9 +1,9 @@
 import React from 'react'
 
-const withVirtualisation = () => {
-  return (
-    <div>withVirtualisation</div>
-  )
+const withVirtualisation = (WrappedComponent) => {
+  return func (props){
+
+  }
 }
 
 export default withVirtualisation

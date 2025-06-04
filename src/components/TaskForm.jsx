@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { TaskContext } from "../contexts/TaskContext";
 import Modal from "./Modal";
 import Task from "./Task";
 import { Outlet } from "react-router-dom";
 import toast from "react-hot-toast";
+import { DiDreamweaver } from "react-icons/di";
 
 const TaskForm = () => {
   const { addTask, addNewType, typeList } = useContext(TaskContext);
@@ -15,6 +16,25 @@ const TaskForm = () => {
   const [customCat, setCustomCat] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [buttonType, setButtonType] = useState("");
+
+  const [divWidth, setdivWidth] = useState();
+  const itemWidth = 200;
+  const divRef = useRef(null);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (divRef.current) {
+        const offWidth = divRef.current.offsetWidth;
+        setdivWidth(offWidth);
+        setIndice([0, Math.floor(offWidth / itemWidth)]);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize",updateWidth);
+return () => window.removeEventListener("resize", updateWidth);
+
+  }, [typeList]);
 
   const handleCat = () => {
     const trimmed = customCat.trim();
@@ -45,18 +65,17 @@ const TaskForm = () => {
       toast.success(`Task added in ${type}!`);
     }
   };
-
-  const fullWidth = 1920;
-  const itemWidth = 200;
-  const [indice, setIndice] = useState([0, Math.floor(fullWidth / itemWidth)]);
+console.log()
+  const [indice, setIndice] = useState([0, 2]);
   const visibleCat = typeList.slice(indice[0], indice[1] + 1);
 
   const handleScroll = (e) => {
     const { scrollLeft } = e.target;
     const newStart = Math.floor(scrollLeft / itemWidth);
-    const newEnd = newStart + Math.floor(fullWidth / itemWidth);
+    const newEnd = newStart + Math.floor(divWidth / itemWidth);
     setIndice([newStart, newEnd]);
-    console.log(indice,":::::",visibleCat)
+
+    console.log(indice, ":        :", visibleCat);
   };
 
   const renderForm = () => (
@@ -64,6 +83,7 @@ const TaskForm = () => {
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           e.preventDefault();
+          handleCat();
         }
       }}
       onSubmit={handleSubmit}
@@ -102,11 +122,12 @@ const TaskForm = () => {
   );
 
   const renderCategories = () => (
-    <div className="taskShow">
+    <div className="CategoryShow bg-black">
       <div className="p-4 m-4 bg-white rounded-lg h-screen">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Tasks:</h2>
         <div
-          className="overflow-x-auto flex gap-4 pb-4 px-2"
+          ref={divRef}
+          className="overflow-x-auto bg-red-300 flex gap-4 pb-4 px-2"
           onScroll={handleScroll}
         >
           {visibleCat.map((type) => (
@@ -135,6 +156,7 @@ const TaskForm = () => {
       </div>
     </div>
   );
+  console.log(divWidth);
 
   return (
     <div>
