@@ -20,7 +20,8 @@ const TaskForm = () => {
   const [percentage, setPercentage] = useState(0);
   const [scrollableWidth, setScrollableWidth] = useState(0);
   const itemWidth = 200;
-  const [visibleList, setVisibleList] = useState(typeList);
+  const [indices, setIndices] = useState([0,10])
+   const visibleList=typeList.slice()
   const divRef = useRef(null);
 
   useEffect(() => {
@@ -68,20 +69,18 @@ const TaskForm = () => {
       toast.success(`Task added in ${type}!`);
     }
   };
-
+  
   const handleScroll = (e) => {
     const scrollLeft = e.target.scrollLeft;
     const visiblePart = scrollableWidth - containerWidth;
     const perc = (scrollLeft / visiblePart) * 100;
     setPercentage(perc);
 
+  
     if (perc > 90) {
-      setVisibleList(() => {
-        typeList.slice();
-      });
+      setIndices([10,visibleList.length]);
     }
   };
-
   const renderForm = () => (
     <form
       onKeyDown={(e) => {
@@ -124,6 +123,8 @@ const TaskForm = () => {
       </div>
     </form>
   );
+
+ 
 
   const renderCategories = () => (
     <div className="CategoryShow bg-black">
