@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import Router from "./routes/Router";
 import Task from "./components/Task";
 import { Toaster } from 'react-hot-toast';
+import CategoryList from './components/CategoryList';
 
 
 

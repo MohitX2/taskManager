@@ -4,6 +4,7 @@ import Modal from "./Modal";
 import Task from "./Task";
 import { Outlet } from "react-router-dom";
 import toast from "react-hot-toast";
+import CategoryList from "./CategoryList";
 
 const TaskForm = () => {
   const { addTask, addNewType, typeList } = useContext(TaskContext);
@@ -18,9 +19,9 @@ const TaskForm = () => {
 
   const [containerWidth, setContainerWidth] = useState();
   const [scrollableWidth, setScrollableWidth] = useState(0);
-  const items = 5;
+  
   const itemswidth = 300;
-  const [indices, setIndices] = useState([0, items]);
+  const [indices, setIndices] = useState([0, typeList.length]);
   const visibleList = typeList.slice(indices[0], indices[1] + 1);
   const divRef = useRef(null);
 
@@ -28,28 +29,24 @@ const TaskForm = () => {
     const updateWindowWidth = () => {
       setContainerWidth(divRef.current.clientWidth);
       setScrollableWidth(divRef.current.scrollWidth);
+
     };
 
+    updateWindowWidth()
     window.addEventListener("resize", updateWindowWidth);
   }, []);
 
   useEffect(() => {
+    if (!divRef.current) {
+      return;      
+    }
     if (divRef.current) {
       setContainerWidth(divRef.current.clientWidth);
       setScrollableWidth(divRef.current.scrollWidth);
     }
   }, [typeList]);
 
-  const handleCat = () => {
-    const trimmed = customCat.trim();
-    if (trimmed.length === 0) {
-      toast.error("Category Not Added !");
-    } else {
-      toast.success(`${customCat} category added !`);
-      addNewType(customCat);
-      setCustomCat("");
-    }
-  };
+ 
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -78,6 +75,18 @@ const TaskForm = () => {
 
     setIndices([newStartIndex, newEndIndex]);
   };
+
+   const handleCat = () => {
+    const trimmed = customCat.trim();
+    if (trimmed.length === 0) {
+      toast.error("Category Not Added !");
+    } else {
+      toast.success(`${customCat} category added !`);
+      addNewType(customCat);
+      setCustomCat("");
+    }
+  };
+
   const renderForm = () => (
     <form
       onKeyDown={(e) => {
@@ -122,6 +131,9 @@ const TaskForm = () => {
   );
 
   const renderCategories = () => (
+    
+    <div className="">
+    
     <div className="p-4 m-4 bg-white rounded-lg h-screen">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Tasks:</h2>
       <div
@@ -165,9 +177,10 @@ const TaskForm = () => {
         </div>
       </div>
     </div>
+    </div>
   );
 
-  console.log(visibleList, scrollableWidth);
+  console.log(visibleList,containerWidth, scrollableWidth);
 
   return (
     <div>
