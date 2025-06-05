@@ -1,35 +1,18 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
-import { TaskContext } from "../contexts/TaskContext";
-import Modal from "./Modal";
 import Task from "./Task";
-import { Outlet } from "react-router-dom";
-import toast from "react-hot-toast";
 
 const CategoryList = ({
-  divRef,
-  handleScroll,
-  itemswidth,
+  itemsWidth,
   setIsOpenModal,
   indices,
   setButtonType,
   setType,
+  visibleList,
+  bigWindowWidth,
 }) => {
-  const { typeList } = useContext(TaskContext);
-  
-  const visibleList = typeList.slice(indices[0], indices[1] + 1);
 
   return (
-    <div className="p-4 m-4 bg-white rounded-lg h-screen">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Tasks:</h2>
-      <div
-        ref={divRef}
-        className="Container h-full overflow-x-auto pb-4 px-2"
-        onScroll={handleScroll}
-      >
-        <div
-          className=" bigWindow relative h-full"
-          style={{ width: itemswidth * typeList.length }}
-        >
+    <div className="p-4 relative bg-red-400 rounded-lg h-screen"
+  style={{ width: `${bigWindowWidth}px` }}>
           {visibleList.map((type, index) => {
             return (
               <div
@@ -39,7 +22,7 @@ const CategoryList = ({
                 } min-h-[400px] absolute min-w-[280px] max-w-[300px] bg-opacity-90 p-4 rounded-lg shadow-md`}
                 style={{
                   backgroundColor: type.color,
-                  left: `${(indices[0] + index) * itemswidth + 10}px`,
+                  left: `${(indices[0] + index) * itemsWidth}px`,
                 }}
               >
                 <div className="flex justify-between items-center mb-2">
@@ -59,8 +42,8 @@ const CategoryList = ({
               </div>
             );
           })}
-        </div>
-      </div>
+        
+
     </div>
   );
 };

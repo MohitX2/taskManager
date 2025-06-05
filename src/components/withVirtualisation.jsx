@@ -1,30 +1,46 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
-return function (categoryList, props) {
-  const withVirtualisation = (Component, itemWidth=300) => {
+const withVirtualisation = (Component, itemsWidth) => {
+  return function ({ items, ...props }) {
     const [containerWidth, setContainerWidth] = useState();
     const [scrollableWidth, setScrollableWidth] = useState(0);
-    const [indices, setIndices] = useState([0, typeList.length]);
+
     const divRef = useRef(null);
 
-    const handleScroll = (e) => {
-      const { scrollLeft } = e.target;
-      console.log(scrollLeft);
-      const newStartIndex = Math.floor(scrollLeft / itemswidth);
-      const newEndIndex = newStartIndex + Math.ceil(containerWidth / itemWidth);
+    const [indices, setIndices] = useState([0, 3]);
+    const visibleList = items.slice(indices[0], indices[1] + 1);
 
-      setIndices([newStartIndex, newEndIndex]);
+    console.log(visibleList);
+
+    const calcIndice=()=>{
+ if (!divRef.current) {
+        return;
+      }
+      if (divRef.current) {
+      const scrollLeft = divRef.current.scrollLeft
+      const width = divRef.current.clientWidth
+      const newStart = Math.floor(scrollLeft/itemsWidth)
+      const endStart = newStart+Math.ceil(width/itemsWidth)
+      return setIndices([newStart,endStart])
+      }
+      
+       
+    }
+
+    const handleScroll = () => {
+      calcIndice()
     };
 
-    useEffect(() => {
-      const updateWindowWidth = () => {
+    const updateWindowWidth = () => {
+      if (!divRef.current) {
+        return;
+      }
+      if (divRef.current) {
         setContainerWidth(divRef.current.clientWidth);
         setScrollableWidth(divRef.current.scrollWidth);
-      };
+      }
+    };
 
-      updateWindowWidth();
-      window.addEventListener("resize", updateWindowWidth);
-    }, []);
 
     useEffect(() => {
       if (!divRef.current) {
@@ -33,18 +49,30 @@ return function (categoryList, props) {
       if (divRef.current) {
         setContainerWidth(divRef.current.clientWidth);
         setScrollableWidth(divRef.current.scrollWidth);
+        calcIndice()
       }
-    }, [typeList]);
-      
+      window.addEventListener("resize", updateWindowWidth);
+    }, [items]);
+
+    //extra chize
+
+
+    const bigWindowWidth=itemsWidth * items.length;
 
     return (
-
-    <div className="w-screen">
-    <Component {...props} />
-    </div>
-  
-  )
-    
+      <div
+        className="Container h-full overflow-x-auto pb-4 px-2"
+        onScroll={handleScroll}
+        ref={divRef}
+      >
+        <div
+          className="bigWindow bg-slate-600 relative h-full"
+          style={{ width: `${bigWindowWidth}px` }}
+        >
+          <Component itemsWidth={itemsWidth} visibleList={visibleList} indices={indices} {...props} />
+        </div>
+      </div>
+    );
   };
 };
 

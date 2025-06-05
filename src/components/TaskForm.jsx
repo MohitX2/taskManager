@@ -4,9 +4,11 @@ import Modal from "./Modal";
 import Task from "./Task";
 import { Outlet } from "react-router-dom";
 import toast from "react-hot-toast";
-import CategoryList from "./CategoryList";
+import CategoryList from "./CategoryList.jsx";
+import withVirtualisation from "./withVirtualisation";
 
 const TaskForm = () => {
+  
   const { addTask, addNewType, typeList } = useContext(TaskContext);
 
   const [title, setTitle] = useState("");
@@ -17,36 +19,13 @@ const TaskForm = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [buttonType, setButtonType] = useState("");
 
-  const [containerWidth, setContainerWidth] = useState();
-  const [scrollableWidth, setScrollableWidth] = useState(0);
-  
-  const itemswidth = 300;
-  const [indices, setIndices] = useState([0, typeList.length]);
-  const visibleList = typeList.slice(indices[0], indices[1] + 1);
-  const divRef = useRef(null);
+  // const [containerWidth, setContainerWidth] = useState();
 
-  useEffect(() => {
-    const updateWindowWidth = () => {
-      setContainerWidth(divRef.current.clientWidth);
-      setScrollableWidth(divRef.current.scrollWidth);
 
-    };
 
-    updateWindowWidth()
-    window.addEventListener("resize", updateWindowWidth);
-  }, []);
+  const itemsWidth = 300;
+  const VirtualisedCategoryList = withVirtualisation(CategoryList, itemsWidth);
 
-  useEffect(() => {
-    if (!divRef.current) {
-      return;      
-    }
-    if (divRef.current) {
-      setContainerWidth(divRef.current.clientWidth);
-      setScrollableWidth(divRef.current.scrollWidth);
-    }
-  }, [typeList]);
-
- 
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -67,21 +46,13 @@ const TaskForm = () => {
     }
   };
 
-  const handleScroll = (e) => {
-    const { scrollLeft } = e.target;
-    console.log(scrollLeft);
-    const newStartIndex = Math.floor(scrollLeft / itemswidth);
-    const newEndIndex = newStartIndex + Math.floor(containerWidth / itemswidth);
 
-    setIndices([newStartIndex, newEndIndex]);
-  };
-
-   const handleCat = () => {
+  const handleCat = () => {
     const trimmed = customCat.trim();
     if (trimmed.length === 0) {
       toast.error("Category Not Added !");
     } else {
-      toast.success(`${customCat} category added !`);
+      toast.success(`${customCat} Category added !`);
       addNewType(customCat);
       setCustomCat("");
     }
@@ -130,58 +101,6 @@ const TaskForm = () => {
     </form>
   );
 
-  const renderCategories = () => (
-    
-    <div className="">
-    
-    <div className="p-4 m-4 bg-white rounded-lg h-screen">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Tasks:</h2>
-      <div
-        ref={divRef}
-        className="Container h-full overflow-x-auto pb-4 px-2"
-        onScroll={handleScroll}
-      >
-        <div
-          className=" bigWindow relative h-full"
-          style={{ width: itemswidth * typeList.length }}
-        >
-          {visibleList.map((type, index) => {
-            return (
-              <div
-                key={type.color}
-                className={`${
-                  type.title + "child"
-                } min-h-[400px] absolute min-w-[280px] max-w-[300px] bg-opacity-90 p-4 rounded-lg shadow-md`}
-                style={{
-                  backgroundColor: type.color,
-                  left: `${(indices[0] + index) * itemswidth + 10}px`,
-                }}
-              >
-                <div className="flex justify-between items-center mb-2">
-                  <p className="font-bold uppercase text-lg">{type.title}</p>
-                  <button
-                    onClick={() => {
-                      setIsOpenModal(true);
-                      setButtonType(type.title);
-                      setType(type.title);
-                    }}
-                    className="h-8 w-8 bg-red-300 rounded-lg font-bold text-white flex items-center justify-center"
-                  >
-                    +
-                  </button>
-                </div>
-                <Task type={type} />
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-    </div>
-  );
-
-  console.log(visibleList,containerWidth, scrollableWidth);
-
   return (
     <div>
       <div className="mx-5">
@@ -190,8 +109,17 @@ const TaskForm = () => {
         </h1>
         {renderForm()}
       </div>
-
-      {renderCategories()}
+      <div className="p-2 bg-white m-3 rounded-lg h-fit">
+        <h2 className="text-2xl font-bold text-gray-800 border-b-4 border-violet-100">
+          Your Tasks:
+        </h2>
+        <VirtualisedCategoryList
+          items={typeList}
+          setIsOpenModal={setIsOpenModal}
+          setButtonType={setButtonType}
+          setType={setType}
+        />
+      </div>
       <Outlet />
 
       <Modal
