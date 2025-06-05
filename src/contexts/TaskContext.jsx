@@ -1,6 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useState,useEffect } from "react";
 import toast from "react-hot-toast";
-
 
 function generateRandomPastelColor() {
   const randomChannel = () => Math.floor(Math.random() * 128 + 127);
@@ -16,13 +15,14 @@ export const TaskContext = createContext();
 
 export const TaskContextProvider = ({ children }) => {
   const [taskList, setTaskList] = useState([]);
+  
   const [typeList, setTypeList] = useState([
     { title: "todo", color: "#ffd182" },
     { title: "done", color: "#ccffee" },
     { title: "other", color: "#e1d7ff" },
   ]);
 
-  const addTask = (title,type,desc) => {
+  const addTask = (title, type, desc) => {
     const newTask = {
       id: Date.now(),
       title,
@@ -38,38 +38,40 @@ export const TaskContextProvider = ({ children }) => {
   };
 
   const updateTask = (id, newDesc) => {
-    
     toast.success("Updated!");
-  setTaskList(prev =>
-    prev.map(task =>
-      task.id === id ? { ...task, desc: newDesc } : task
-    )
-  );
-};
-
+    setTaskList((prev) =>
+      prev.map((task) => (task.id === id ? { ...task, desc: newDesc } : task))
+    );
+  };
 
   const addNewType = (nt) => {
     const newtype = { title: nt, color: generateRandomPastelColor() };
-    
+
     const check = typeList.filter((item) => item.title == nt);
     if (check) {
-      setTypeList((prev) => [ ...prev, newtype]);
+      setTypeList((prev) => [...prev, newtype]);
     }
   };
 
   const updateType = (taskId, updatedType) => {
-  setTaskList(
-    taskList.map((task) =>
-      task.id === taskId ? { ...task, type: updatedType } : task
-    )
-   );
+    setTaskList(
+      taskList.map((task) =>
+        task.id === taskId ? { ...task, type: updatedType } : task
+      )
+    );
   };
-
-
 
   return (
     <TaskContext.Provider
-      value={{ taskList, typeList, addTask, delTask, addNewType, updateType,updateTask}}
+      value={{
+        taskList,
+        typeList,
+        addTask,
+        delTask,
+        addNewType,
+        updateType,
+        updateTask,
+      }}
     >
       {children}
     </TaskContext.Provider>

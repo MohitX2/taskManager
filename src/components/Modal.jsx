@@ -58,6 +58,7 @@ function Modal({
 
           <div className="flex justify-between">
             <button
+            
               onClick={handleSubmit}
               className={`${
                 title.trim().length === 0
