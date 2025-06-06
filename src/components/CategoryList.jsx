@@ -11,7 +11,7 @@ const CategoryList = ({
 }) => {
 
   return (
-    <div className="p-4 relative bg-red-400 rounded-lg h-screen"
+    <div className="p-4 relative rounded-lg h-screen"
   style={{ width: `${bigWindowWidth}px` }}>
           {visibleList.map((type, index) => {
             return (

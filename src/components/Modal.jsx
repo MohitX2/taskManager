@@ -25,7 +25,7 @@ function Modal({
         className="fixed inset-0 bg-black/40 z-30"
       />
 
-      <div className="fixed z-40 top-[30%] left-[30%] bg-[#2A4759] text-white p-4 rounded-lg shadow-lg xl:w-1/3 h-1/2 w-1/2">
+      <div className="fixed z-40 top-[30%] left-[30%] bg-[#2A4759] text-white p-4 rounded-lg shadow-lg xl:w-1/3 h-fit w-1/2">
 
         <div className="grid gap-3">
           <div className="flex gap-2">

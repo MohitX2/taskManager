@@ -19,9 +19,6 @@ const TaskForm = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [buttonType, setButtonType] = useState("");
 
-  // const [containerWidth, setContainerWidth] = useState();
-
-
 
   const itemsWidth = 300;
   const VirtualisedCategoryList = withVirtualisation(CategoryList, itemsWidth);
@@ -120,6 +117,7 @@ const TaskForm = () => {
           setType={setType}
         />
       </div>
+      
       <Outlet />
 
       <Modal

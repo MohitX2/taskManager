@@ -9,26 +9,22 @@ const withVirtualisation = (Component, itemsWidth) => {
 
     const [indices, setIndices] = useState([0, 3]);
     const visibleList = items.slice(indices[0], indices[1] + 1);
-
-    console.log(visibleList);
-
-    const calcIndice=()=>{
- if (!divRef.current) {
+    
+    const calcIndice = () => {
+      if (!divRef.current) {
         return;
       }
       if (divRef.current) {
-      const scrollLeft = divRef.current.scrollLeft
-      const width = divRef.current.clientWidth
-      const newStart = Math.floor(scrollLeft/itemsWidth)
-      const endStart = newStart+Math.ceil(width/itemsWidth)
-      return setIndices([newStart,endStart])
+        const scrollLeft = divRef.current.scrollLeft;
+        const width = divRef.current.clientWidth;
+        const newStart = Math.floor(scrollLeft / itemsWidth);
+        const endStart = newStart + Math.ceil(width / itemsWidth);
+        return setIndices([newStart, endStart]);
       }
-      
-       
-    }
+    };
 
     const handleScroll = () => {
-      calcIndice()
+      calcIndice();
     };
 
     const updateWindowWidth = () => {
@@ -40,8 +36,7 @@ const withVirtualisation = (Component, itemsWidth) => {
         setScrollableWidth(divRef.current.scrollWidth);
       }
     };
-
-
+    
     useEffect(() => {
       if (!divRef.current) {
         return;
@@ -49,15 +44,14 @@ const withVirtualisation = (Component, itemsWidth) => {
       if (divRef.current) {
         setContainerWidth(divRef.current.clientWidth);
         setScrollableWidth(divRef.current.scrollWidth);
-        calcIndice()
+        calcIndice();
       }
       window.addEventListener("resize", updateWindowWidth);
-    }, [items]);
+    }, [items.length]);
 
     //extra chize
 
-
-    const bigWindowWidth=itemsWidth * items.length;
+    const bigWindowWidth = itemsWidth * items.length;
 
     return (
       <div
@@ -66,10 +60,15 @@ const withVirtualisation = (Component, itemsWidth) => {
         ref={divRef}
       >
         <div
-          className="bigWindow bg-slate-600 relative h-full"
+          className="bigWindow  relative h-full"
           style={{ width: `${bigWindowWidth}px` }}
         >
-          <Component itemsWidth={itemsWidth} visibleList={visibleList} indices={indices} {...props} />
+          <Component
+            itemsWidth={itemsWidth}
+            visibleList={visibleList}
+            indices={indices}
+            {...props}
+          />
         </div>
       </div>
     );

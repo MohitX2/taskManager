@@ -18,7 +18,7 @@ const TaskShow = () => {
         .filter((item) => item.id == id)
         .map((task) => (
           <div
-            key={id}
+            key={task.id}
             className="flex flex-col bg-white min-w-[250px] text-black m-10 p-6 rounded-xl z-40 "
           >
             <div className="flex justify-between font-semibold">
@@ -29,7 +29,7 @@ const TaskShow = () => {
                 onChange={(e) => updateType(task.id, e.target.value)}
               >
                 {typeList.map((type) => (
-                  <option>{type.title}</option>
+                  <option id={type.color}>{type.title}</option>
                 ))}
               </select>
             </div>

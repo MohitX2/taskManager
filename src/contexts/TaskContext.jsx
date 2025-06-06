@@ -54,8 +54,8 @@ export const TaskContextProvider = ({ children }) => {
   };
 
   const updateType = (taskId, updatedType) => {
-    setTaskList(
-      taskList.map((task) =>
+    setTaskList((prev)=>
+      prev.map((task) =>
         task.id === taskId ? { ...task, type: updatedType } : task
       )
     );
