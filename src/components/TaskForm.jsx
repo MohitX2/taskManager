@@ -1,11 +1,14 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext } from "react";
 import { TaskContext } from "../contexts/TaskContext";
 import Modal from "./Modal";
-import Task from "./Task";
+
 import { Outlet } from "react-router-dom";
 import toast from "react-hot-toast";
 import CategoryList from "./CategoryList.jsx";
 import withVirtualisation from "./withVirtualisation";
+
+const itemsWidth = 300;
+  const VirtualisedCategoryList = withVirtualisation(CategoryList, itemsWidth);
 
 const TaskForm = () => {
   
@@ -20,8 +23,7 @@ const TaskForm = () => {
   const [buttonType, setButtonType] = useState("");
 
 
-  const itemsWidth = 300;
-  const VirtualisedCategoryList = withVirtualisation(CategoryList, itemsWidth);
+  
 
 
   const handleSubmit = (e) => {
@@ -98,6 +100,8 @@ const TaskForm = () => {
     </form>
   );
 
+
+
   return (
     <div>
       <div className="mx-5">
@@ -107,7 +111,7 @@ const TaskForm = () => {
         {renderForm()}
       </div>
       <div className="p-2 bg-white m-3 rounded-lg h-fit">
-        <h2 className="text-2xl font-bold text-gray-800 border-b-4 border-violet-100">
+        <h2 className="text-2xl font-bold text-gray-800 ">
           Your Tasks:
         </h2>
         <VirtualisedCategoryList
@@ -117,7 +121,7 @@ const TaskForm = () => {
           setType={setType}
         />
       </div>
-      
+
       <Outlet />
 
       <Modal

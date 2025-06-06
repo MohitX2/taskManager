@@ -37,7 +37,7 @@ function Modal({
               onChange={(e) => setTitle(e.target.value)}
             />
             <select
-              className="rounded-lg bg-[#EEEEEE] text-[#2A4759] border-[2px] border-[#DDDDDD]"
+              className="rounded-lg bg-[#EEEEEE] text-[#2A4759] border-[2px] border-[#DDDDDD] w-20"
               value={type}
               onChange={(e) => setType(e.target.value)}
             >

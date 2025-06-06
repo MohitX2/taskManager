@@ -15,7 +15,7 @@ export const TaskContext = createContext();
 
 export const TaskContextProvider = ({ children }) => {
   const [taskList, setTaskList] = useState([]);
-  
+
   const [typeList, setTypeList] = useState([
     { title: "todo", color: "#ffd182" },
     { title: "done", color: "#ccffee" },
@@ -54,12 +54,46 @@ export const TaskContextProvider = ({ children }) => {
   };
 
   const updateType = (taskId, updatedType) => {
-    setTaskList((prev)=>
+    setTaskList((prev) =>
       prev.map((task) =>
         task.id === taskId ? { ...task, type: updatedType } : task
       )
     );
   };
+
+  const downChangeIndex = (colour) => {
+    console.log("up")
+    setTypeList((prev) => {
+      if (prev.length === 0) return;
+      const index = prev.findIndex((type) => type.color === colour);
+      if (index === -1 || index >= prev.length - 1) return prev;
+      // console.log(index)
+      const newArray = [...prev];
+      const temp = newArray[index];
+      newArray[index] = newArray[index + 1];
+      newArray[index + 1] = temp;
+      return newArray;
+    });
+  };
+  const upChangeIndex = (colour) => {
+    console.log("down")
+    setTypeList((prev) => {
+      if (prev.length === 0) return;
+      const index = prev.findIndex((type) => type.color === colour);
+      if (index === -1 || index >= prev.length - 1) return prev;
+      if(index===0){
+        return prev;
+      }
+      const newArray = [...prev];
+      const temp = newArray[index];
+      newArray[index] = newArray[index - 1];
+      newArray[index - 1] = temp;
+      return newArray;
+    });
+  };
+  
+  
+
 
   return (
     <TaskContext.Provider
@@ -71,6 +105,8 @@ export const TaskContextProvider = ({ children }) => {
         addNewType,
         updateType,
         updateTask,
+        upChangeIndex,
+        downChangeIndex,
       }}
     >
       {children}

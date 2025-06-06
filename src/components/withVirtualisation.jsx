@@ -10,6 +10,7 @@ const withVirtualisation = (Component, itemsWidth) => {
     const [indices, setIndices] = useState([0, 3]);
     const visibleList = items.slice(indices[0], indices[1] + 1);
     
+    console.log(visibleList)
     const calcIndice = () => {
       if (!divRef.current) {
         return;
@@ -36,7 +37,18 @@ const withVirtualisation = (Component, itemsWidth) => {
         setScrollableWidth(divRef.current.scrollWidth);
       }
     };
+
     
+    useEffect(()=>{
+        setContainerWidth(divRef.current.clientWidth);
+        setScrollableWidth(divRef.current.scrollWidth);
+        calcIndice();
+      window.addEventListener("resize", updateWindowWidth);
+      
+      return () => window.removeEventListener("resize",updateWindowWidth)
+
+    },[])
+
     useEffect(() => {
       if (!divRef.current) {
         return;
@@ -46,10 +58,11 @@ const withVirtualisation = (Component, itemsWidth) => {
         setScrollableWidth(divRef.current.scrollWidth);
         calcIndice();
       }
-      window.addEventListener("resize", updateWindowWidth);
-    }, [items.length]);
+
+    }, [items.length,scrollableWidth,containerWidth]);
 
     //extra chize
+     console.log(visibleList)
 
     const bigWindowWidth = itemsWidth * items.length;
 

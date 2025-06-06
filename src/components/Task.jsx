@@ -1,47 +1,52 @@
-import React from 'react';
+import React from "react";
 import { useContext, useState } from "react";
-import { TaskContext } from '../contexts/TaskContext';
+import { TaskContext } from "../contexts/TaskContext";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { FaRegFolderOpen } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-
-const Task = ({ type }) => {
-
+const Task = ({
+  type,
+  itemsHeight,
+  indices,
+  visibleList,
+  bigWindowWidth,
+}) => {
   const navigate = useNavigate();
-  const {
-    delTask,
-    taskList,
-    typeList,
-    updateType,
-    updateTask,
-  } = useContext(TaskContext);
+  const { delTask, taskList, typeList, updateType, updateTask } =
+    useContext(TaskContext);
 
   const [editingId, setEditingId] = useState("");
   const [tempDesc, setTempDes] = useState("");
 
-  const openTask =(id)=>{
-    navigate(`/dashboard/task/${id}`)
-  }
+  const openTask = (id) => {
+    navigate(`/dashboard/task/${id}`);
+  };
 
   return (
-    <div>
-      {taskList
-        .filter((item) =>( item.type === type.title ))
-        .map((task, i) => (
+    <div
+      className="p-4 relative rounded-lg h-screen"
+      style={{ width: `${bigWindowWidth}px` }}
+    >
+      {visibleList
+        .filter((item) => item.type === type.title)
+        .map((task, index) => (
           <div
-            className="bg-[#2A4759] text-white rounded-md mb-3 p-3 space-y-2"
+            className="bg-[#2A4759] text-white rounded-md mt-2 p-3 space-y-2"
+             style={{
+              left: `${(indices[0] + index) * itemsHeight}px`,
+            }}
             key={task.id}
           >
             <div className="flex justify-between items-start">
               <div className="flex gap-2 text-sm flex-wrap max-w-[60%]">
-                <p className="font-semibold">{i + 1}.</p>
-                <p className="break-all">{task.title}</p>
+                <p className="font-semibold">{index + 1}.</p>
+                <p>{task.title}</p>
               </div>
               <div className="flex gap-2">
                 <select
-                  className="rounded-lg bg-[#EEEEEE] text-[#2A4759] text-sm border border-[#DDDDDD]"
+                  className="rounded-lg bg-[#EEEEEE] text-[#2A4759] text-sm border border-[#DDDDDD] w-20"
                   value={task.type}
                   onChange={(e) => updateType(task.id, e.target.value)}
                 >
@@ -85,7 +90,7 @@ const Task = ({ type }) => {
                       setTempDes("");
                     }}
                   >
-                  X
+                    X
                   </button>
                 </div>
               </div>
@@ -96,18 +101,20 @@ const Task = ({ type }) => {
                 </div>
                 <div className="flex flex-col gap-2">
                   <button
-                  onClick={() => {
-                    setEditingId(task.id);
-                    setTempDes(task.desc);
-                  }}
-                  className="ml-2 bg-blue-500 h-8 text-white text-sm px-2 py-1 rounded-lg"
-                >
-                  <FaEdit />
-                </button>
-                <button
-                className="ml-2 bg-blue-500 h-8 text-white text-sm px-2 py-1 rounded-lg"
-                 onClick={()=>openTask(task.id)}
-                ><FaRegFolderOpen /></button>
+                    onClick={() => {
+                      setEditingId(task.id);
+                      setTempDes(task.desc);
+                    }}
+                    className="ml-2 bg-blue-500 h-8 text-white text-sm px-2 py-1 rounded-lg"
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    className="ml-2 bg-blue-500 h-8 text-white text-sm px-2 py-1 rounded-lg"
+                    onClick={() => openTask(task.id)}
+                  >
+                    <FaRegFolderOpen />
+                  </button>
                 </div>
               </div>
             )}
