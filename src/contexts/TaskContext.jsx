@@ -61,38 +61,25 @@ export const TaskContextProvider = ({ children }) => {
     );
   };
 
-  const downChangeIndex = (colour) => {
-    console.log("up")
+    const downChangeIndex = (colour) => {
     setTypeList((prev) => {
-      if (prev.length === 0) return;
       const index = prev.findIndex((type) => type.color === colour);
       if (index === -1 || index >= prev.length - 1) return prev;
-      // console.log(index)
       const newArray = [...prev];
-      const temp = newArray[index];
-      newArray[index] = newArray[index + 1];
-      newArray[index + 1] = temp;
+      [newArray[index], newArray[index + 1]] = [newArray[index + 1], newArray[index]];
       return newArray;
     });
   };
+
   const upChangeIndex = (colour) => {
-    console.log("down")
     setTypeList((prev) => {
-      if (prev.length === 0) return;
       const index = prev.findIndex((type) => type.color === colour);
-      if (index === -1 || index >= prev.length - 1) return prev;
-      if(index===0){
-        return prev;
-      }
+      if (index <= 0) return prev;
       const newArray = [...prev];
-      const temp = newArray[index];
-      newArray[index] = newArray[index - 1];
-      newArray[index - 1] = temp;
+      [newArray[index], newArray[index - 1]] = [newArray[index - 1], newArray[index]];
       return newArray;
     });
   };
-  
-  
 
 
   return (
