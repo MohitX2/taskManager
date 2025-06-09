@@ -14,7 +14,7 @@ const TaskList = ({
   bigWindowWidth,
 }) => {
   const navigate = useNavigate();
-  const { delTask, taskList, typeList, updateType, updateTask } =
+  const { delTask, typeList, updateType, updateTask } =
     useContext(TaskContext);
 
   const [editingId, setEditingId] = useState("");
@@ -35,10 +35,10 @@ const TaskList = ({
           style={{
               top: `${(indices[0] + index) * itemsHeight}px`,
             }}
-            className="bg-[#2A4759] text-white rounded-md mt-2 p-3 space-y-2 absolute"
+            className="bg-[#2A4759] text-white rounded-md mt-2 p-3 space-y-2 absolute w-fit"
             key={task.id}
           >
-            <div className="flex justify-between items-start">
+            <div className="flex gap-2 justify-between items-start">
               <div className="flex gap-2 text-sm flex- wrap max-w-[60%]">
                 <p className="font-semibold">{index + 1}.</p>
                 <p>{task.title}</p>
