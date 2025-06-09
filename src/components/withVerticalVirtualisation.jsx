@@ -6,10 +6,10 @@ const withVerticalVirtualisation = (Component, itemsHeight) => {
     const [scrollableHeight, setScrollableHeight] = useState(0);
 
     const divRef = useRef(null);
-
-    const [indices, setIndices] = useState([0, 3]);
+    const [indices, setIndices] = useState([0, 0]);
 
     const visibleList = items.slice(indices[0], indices[1] + 1);
+    console.log(visibleList)
 
     const calcIndices = () => {
       if (!divRef.current) return;
@@ -17,8 +17,11 @@ const withVerticalVirtualisation = (Component, itemsHeight) => {
       const scrollTop = divRef.current.scrollTop;
       const height = divRef.current.clientHeight;
 
-      const newStart = Math.floor(scrollTop / itemsHeight);
-      const newEnd = newStart + Math.ceil(height / itemsHeight);
+      const newStart = Math.max(0, Math.floor(scrollTop / itemsHeight));
+      const newEnd = Math.min(
+        items.length - 1,
+        newStart + Math.ceil(height / itemsHeight) 
+      );
 
       setIndices([newStart, newEnd]);
     };
@@ -46,7 +49,7 @@ const withVerticalVirtualisation = (Component, itemsHeight) => {
     }, []);
 
     useEffect(() => {
-      updateWindowHeight(); 
+      updateWindowHeight();
       calcIndices();
     }, [items.length]);
 
@@ -54,9 +57,9 @@ const withVerticalVirtualisation = (Component, itemsHeight) => {
 
     return (
       <div
-        className="Container h-full overflow-y-auto pb-4 px-2"
-        onScroll={handleScroll}
+        className="Container h-[780px] overflow-y-scroll"
         ref={divRef}
+        onScroll={handleScroll}
       >
         <div
           className="bigWindow relative w-full"

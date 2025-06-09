@@ -6,7 +6,7 @@ import { FaEdit } from "react-icons/fa";
 import { FaRegFolderOpen } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const Task = ({
+const TaskList = ({
   type,
   itemsHeight,
   indices,
@@ -27,20 +27,19 @@ const Task = ({
   return (
     <div
       className="p-4 relative rounded-lg h-screen"
-      style={{ width: `${bigWindowWidth}px` }}
+      style={{ height: `${bigWindowWidth}px` }}
     >
       {visibleList
-        .filter((item) => item.type === type.title)
         .map((task, index) => (
           <div
-            className="bg-[#2A4759] text-white rounded-md mt-2 p-3 space-y-2"
-             style={{
-              left: `${(indices[0] + index) * itemsHeight}px`,
+          style={{
+              top: `${(indices[0] + index) * itemsHeight}px`,
             }}
+            className="bg-[#2A4759] text-white rounded-md mt-2 p-3 space-y-2 absolute"
             key={task.id}
           >
             <div className="flex justify-between items-start">
-              <div className="flex gap-2 text-sm flex-wrap max-w-[60%]">
+              <div className="flex gap-2 text-sm flex- wrap max-w-[60%]">
                 <p className="font-semibold">{index + 1}.</p>
                 <p>{task.title}</p>
               </div>
@@ -124,4 +123,4 @@ const Task = ({
   );
 };
 
-export default Task;
+export default TaskList;

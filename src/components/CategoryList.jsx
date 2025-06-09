@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import Task from "./Task";
+import TaskList from "./TaskList";
 import { HiOutlineArrowSmLeft, HiArrowSmRight } from "react-icons/hi";
 import { TaskContext } from "../contexts/TaskContext";
 import withVerticalVirtualisation from './withVerticalVirtualisation';
@@ -11,31 +11,23 @@ const CategoryList = ({
   setButtonType,
   setType,
   visibleList,
-  bigWindowWidth,
 }) => {
-
-  const itemsHeight=200
-  const VirtualisedTaskList = withVerticalVirtualisation(Task,itemsHeight)
+  const itemsHeight=250
+  const VirtualisedTaskList = withVerticalVirtualisation(TaskList,itemsHeight)
 
 
 
   const {taskList,upChangeIndex,downChangeIndex}=useContext(TaskContext)
   return (
-    <div
-      className="p-4 relative rounded-lg h-screen"
-      style={{ width: `${bigWindowWidth}px` }}
-    >
+    <>
       {visibleList.map((type, index) => {
         return (
           <div
             key={type.color}
-            className={`${
-              type.title + "child"
-            } min-h-[300px] absolute min-w-[280px] max-w-[300px] bg-opacity-90 p-4 rounded-lg shadow-md`}
+            className={"absolute min-w-[280px] max-w-[300px] bg-opacity-90 p-4 rounded-lg shadow-md h-fit "}
             style={{
               backgroundColor: type.color,
-              left: `${(indices[0] + index) * itemsWidth}px`,
-            }}
+              left: `${(indices[0] + index) * itemsWidth}px`}}
           >
             <div className="flex flex-col">
               <div className="flex justify-between items-center mb-2">
@@ -53,7 +45,7 @@ const CategoryList = ({
                 </button>
               </div>
 
-              <div className="flex  justify-between w-full h- ">
+              <div className="flex  justify-between w-full">
                 <button
                 onClick={()=>upChangeIndex(type.color)} 
                 className="h-8 w-8 bg-white rounded-lg font-bold text-black flex items-center justify-center">
@@ -73,7 +65,7 @@ const CategoryList = ({
           </div>
         );
       })}
-    </div>
+    </>
   );
 };
 

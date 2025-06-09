@@ -8,10 +8,9 @@ import CategoryList from "./CategoryList.jsx";
 import withVirtualisation from "./withVirtualisation";
 
 const itemsWidth = 300;
-  const VirtualisedCategoryList = withVirtualisation(CategoryList, itemsWidth);
+const VirtualisedCategoryList = withVirtualisation(CategoryList, itemsWidth);
 
 const TaskForm = () => {
-  
   const { addTask, addNewType, typeList } = useContext(TaskContext);
 
   const [title, setTitle] = useState("");
@@ -21,10 +20,6 @@ const TaskForm = () => {
   const [customCat, setCustomCat] = useState("");
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [buttonType, setButtonType] = useState("");
-
-
-  
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -40,11 +35,10 @@ const TaskForm = () => {
       setTitle("");
       setType("todo");
       setDescription("");
-      setIsOpenModal(false);
+      // setIsOpenModal(false);
       toast.success(`Task added in ${type}!`);
     }
   };
-
 
   const handleCat = () => {
     const trimmed = customCat.trim();
@@ -59,12 +53,6 @@ const TaskForm = () => {
 
   const renderForm = () => (
     <form
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          handleCat();
-        }
-      }}
       onSubmit={handleSubmit}
       className="flex gap-2 my-2 items-start w-full bg-blue-50 p-3 rounded-md justify-around md:flex-row md:items-center"
     >
@@ -80,6 +68,12 @@ const TaskForm = () => {
 
       <div className="flex items-center justify-between gap-2">
         <input
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleCat();
+            }
+          }}
           className="h-10 p-2 text-white bg-blue-300 rounded-md placeholder:text-white font-semibold outline-none mt-2"
           placeholder="Enter Category"
           value={customCat}
@@ -100,8 +94,6 @@ const TaskForm = () => {
     </form>
   );
 
-
-
   return (
     <div>
       <div className="mx-5">
@@ -110,16 +102,16 @@ const TaskForm = () => {
         </h1>
         {renderForm()}
       </div>
-      <div className="p-2 bg-white m-3 rounded-lg h-fit">
-        <h2 className="text-2xl font-bold text-gray-800 ">
-          Your Tasks:
-        </h2>
+      <div className="p-2 h-[859px] bg-white m-3 rounded-lg ">
+        <h2 className="text-2xl font-bold text-gray-800 ">Your Tasks:</h2>
+        <div className="h-screen">
         <VirtualisedCategoryList
           items={typeList}
           setIsOpenModal={setIsOpenModal}
           setButtonType={setButtonType}
           setType={setType}
         />
+        </div>
       </div>
 
       <Outlet />

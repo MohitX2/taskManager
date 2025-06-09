@@ -26,7 +26,6 @@ function Modal({
       />
 
       <div className="fixed z-40 top-[30%] left-[30%] bg-[#2A4759] text-white p-4 rounded-lg shadow-lg xl:w-1/3 h-fit w-1/2">
-
         <div className="grid gap-3">
           <div className="flex gap-2">
             <input
@@ -35,6 +34,11 @@ function Modal({
               placeholder="Enter Task"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit(e)
+                }
+              }}
             />
             <select
               className="rounded-lg bg-[#EEEEEE] text-[#2A4759] border-[2px] border-[#DDDDDD] w-20"
@@ -58,7 +62,6 @@ function Modal({
 
           <div className="flex justify-between">
             <button
-            
               onClick={handleSubmit}
               className={`${
                 title.trim().length === 0

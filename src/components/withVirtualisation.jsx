@@ -10,7 +10,7 @@ const withVirtualisation = (Component, itemsWidth) => {
     const [indices, setIndices] = useState([0, 3]);
     const visibleList = items.slice(indices[0], indices[1] + 1);
     
-    console.log(visibleList)
+  // console.log(visibleList)
     const calcIndice = () => {
       if (!divRef.current) {
         return;
@@ -62,13 +62,13 @@ const withVirtualisation = (Component, itemsWidth) => {
     }, [items.length,scrollableWidth,containerWidth]);
 
     //extra chize
-     console.log(visibleList)
+     //console.log(visibleList)
 
     const bigWindowWidth = itemsWidth * items.length;
 
     return (
       <div
-        className="Container h-full overflow-x-auto pb-4 px-2"
+        className="Container h-full overflow-x-scroll pb-4 px-2"
         onScroll={handleScroll}
         ref={divRef}
       >
