@@ -1,12 +1,31 @@
-# React + Vite
+🗂️ TaskManager – Smart Productivity with Virtualized Performance
+A modern, responsive task management application built with React, designed for performance, scalability, and intuitive UX. TaskManager simplifies task organization with advanced features like modal-based creation, categorical filtering, and virtualized rendering, making it perfect for power users and high-performance environments.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🚀 Key Features That Stand Out:
+🧠 Smart Virtualization
+Implements horizontal virtualization for category lists and scalable task rendering, ensuring lightning-fast performance even with hundreds of tasks.
 
-Currently, two official plugins are available:
+🧩 Modular Component Architecture
+Clean, reusable, and production-ready components using React functional components, useRef, useEffect, and custom hooks to manage logic and UI.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+📋 Task Categorization & Filtering
+Create, group, and visualize tasks by category. Category list is dynamically rendered and optimized for performance and responsiveness.
 
-## Expanding the ESLint configuration
+💡 Modal-Based Task Creation
+User-friendly modal interface for creating tasks, with focus traps, dynamic validation, and seamless UI transitions.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+📐 Responsive UI & Clean UX
+Built with Tailwind CSS and a clean layout, ensuring optimal experience on all devices. Smooth interactions and attention to UX details.
+
+🔍 Scalable Architecture
+Optimized for future enhancements like drag-and-drop, persistent storage, authentication, or RESTful API integration.
+
+⚙️ Tech Stack
+Frontend: React, Tailwind CSS
+
+Hooks & Utilities: useRef, useEffect, custom virtualization logic
+
+Architecture: Modular, scalable folder structure with component separation
+
+Performance: Virtualization, conditional rendering, optimization patterns
+
